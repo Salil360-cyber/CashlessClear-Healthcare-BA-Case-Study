@@ -1,0 +1,28 @@
+flowchart LR
+  subgraph Patient
+    A([Admitted with cashless policy])
+    X([Leaves hospital])
+    N([Kept an extra night]):::bad
+  end
+  subgraph Desk[Hospital insurance & billing desk]
+    A --> B[Send pre-auth request]
+    Q1[Collect missing reports, resend]
+    D[Doctor writes discharge order, often after 15:00]
+    D --> E[Build discharge file: summary, bill, invoices]
+    Q2[Fix missing summary / bill breakup, resend]
+  end
+  subgraph Insurer[Insurer / TPA]
+    B --> C{Documents complete?}
+    C -- No: query --> Q1
+    Q1 --> C
+    C -- Yes --> T[Treatment]
+    T --> D
+    E --> F{Final file complete?}
+    F -- No: query --> Q2
+    Q2 --> F
+    F -- Yes --> G[Final approval]
+  end
+  G --> P{Paid before 22:00?}
+  P -- Yes --> X
+  P -- No --> N
+  classDef bad fill:#f8d7da,stroke:#c0392b;

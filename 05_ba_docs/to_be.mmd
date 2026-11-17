@@ -1,0 +1,23 @@
+flowchart LR
+  subgraph Patient
+    A([Admitted with cashless policy]) --> R[Told room-rent limit and likely deductions]:::new
+    X([Leaves hospital])
+  end
+  subgraph Desk[Hospital insurance & billing desk]
+    R --> K[Pre-auth checklist: reports auto-attached]:::new
+    K --> B[Send complete pre-auth request]
+    PD[Evening before: expected discharge marked, draft summary + provisional bill]:::new
+    D[Discharge order on morning round, before 12:00]
+    PD --> D
+    D --> E[Discharge file checklist: cannot send until complete]:::new
+    TR[Live tracker: 1 h / 3 h clocks, escalation, daily MIS]:::new
+  end
+  subgraph Insurer[Insurer / TPA]
+    B --> C{Documents complete?}
+    C -- Yes --> T[Treatment]
+    T --> PD
+    E --> F{Final file complete?}
+    F -- Yes --> G[Final approval]
+  end
+  G --> X
+  classDef new fill:#d4edda,stroke:#2e7d32;
